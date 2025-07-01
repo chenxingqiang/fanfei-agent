@@ -188,7 +188,7 @@ class MarketplaceConfig(BaseSettings):
 
     MARKETPLACE_API_URL: HttpUrl = Field(
         description="Marketplace API URL",
-        default=HttpUrl("https://marketplace.keyai.tech"),
+        default=HttpUrl("https://marketplace.dify.ai"),
     )
 
 
