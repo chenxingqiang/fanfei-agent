@@ -3,10 +3,10 @@ app:
   icon: 💬
   icon_background: '#F0F8E8'
   mode: workflow
-  name: 客服沟通与信息确认模块
+  name: 供应商沟通与信息确认模块
 
 kind: app
-version: 0.1.2
+version: 0.1.3
 
 workflow:
   conversation_variables: []
@@ -71,7 +71,7 @@ workflow:
     - data:
         isInIteration: false
         sourceType: http-request
-        targetType: parameter-extractor
+        targetType: if-else
       id: 1735721434570-source-1735721434571-target
       source: '1735721434570'
       sourceHandle: source
@@ -81,11 +81,11 @@ workflow:
       zIndex: 0
     - data:
         isInIteration: false
-        sourceType: parameter-extractor
-        targetType: if-else
-      id: 1735721434571-source-1735721434572-target
+        sourceType: if-else
+        targetType: llm
+      id: 1735721434571-true-1735721434572-target
       source: '1735721434571'
-      sourceHandle: source
+      sourceHandle: 'true'
       target: '1735721434572'
       targetHandle: target
       type: custom
@@ -94,20 +94,20 @@ workflow:
         isInIteration: false
         sourceType: if-else
         targetType: llm
-      id: 1735721434572-true-1735721434573-target
-      source: '1735721434572'
-      sourceHandle: 'true'
+      id: 1735721434571-false-1735721434573-target
+      source: '1735721434571'
+      sourceHandle: 'false'
       target: '1735721434573'
       targetHandle: target
       type: custom
       zIndex: 0
     - data:
         isInIteration: false
-        sourceType: if-else
-        targetType: llm
-      id: 1735721434572-false-1735721434574-target
+        sourceType: llm
+        targetType: end
+      id: 1735721434572-source-1735721434574-target
       source: '1735721434572'
-      sourceHandle: 'false'
+      sourceHandle: source
       target: '1735721434574'
       targetHandle: target
       type: custom
@@ -116,21 +116,10 @@ workflow:
         isInIteration: false
         sourceType: llm
         targetType: end
-      id: 1735721434573-source-1735721434575-target
+      id: 1735721434573-source-1735721434574-target
       source: '1735721434573'
       sourceHandle: source
-      target: '1735721434575'
-      targetHandle: target
-      type: custom
-      zIndex: 0
-    - data:
-        isInIteration: false
-        sourceType: llm
-        targetType: end
-      id: 1735721434574-source-1735721434575-target
-      source: '1735721434574'
-      sourceHandle: source
-      target: '1735721434575'
+      target: '1735721434574'
       targetHandle: target
       type: custom
       zIndex: 0
@@ -290,9 +279,8 @@ workflow:
       width: 244
     - data:
         authorization:
-          config:
-            api_key: '{{#sys.api_key#}}'
-          type: api-key
+          config: null
+          type: no-auth
         body:
           data: |-
             {
@@ -309,12 +297,12 @@ workflow:
         params: ''
         selected: false
         timeout:
-          max_connect_timeout: 30
-          max_read_timeout: 30
-          max_write_timeout: 30
+          connect: 30
+          read: 60
+          write: 60
         title: 发送询价监控回复
         type: http-request
-        url: '{{#sys.inquiry_api#}}/send-and-monitor'
+        url: http://localhost:5001/api/inquiry/send-and-monitor
         variables: []
       height: 54
       id: '1735721434570'
@@ -328,51 +316,15 @@ workflow:
       type: custom
       width: 244
     - data:
-        desc: 提取回复监控状态和响应信息
-        instruction: |-
-          从询价监控系统的响应中提取以下参数：
-          1. 发送状态 (send_status)
-          2. 已回复供应商数量 (replied_count)
-          3. 回复内容摘要 (reply_summary)
-          4. 待跟进供应商列表 (pending_suppliers)
-        parameters:
-        - name: send_status
-          required: true
-          type: string
-        - name: replied_count
-          required: true
-          type: number
-        - name: reply_summary
-          required: false
-          type: string
-        - name: pending_suppliers
-          required: false
-          type: string
-        selected: false
-        title: 提取回复状态
-        type: parameter-extractor
-      height: 54
-      id: '1735721434571'
-      position:
-        x: 1296
-        y: 50
-      positionAbsolute:
-        x: 1296
-        y: 50
-      selected: false
-      type: custom
-      width: 244
-    - data:
         cases:
         - case_id: has_replies
           conditions:
           - comparison_operator: contains
-            id: '1735721434570-case-has_replies-condition-1'
+            id: condition-has-replies-1
             value: success
             variable_selector:
             - '1735721434570'
             - body
-            - status
           id: has_replies
           logical_operator: and
         desc: 判断是否有供应商回复
@@ -381,12 +333,12 @@ workflow:
         title: 回复状态判断
         type: if-else
       height: 126
-      id: '1735721434572'
+      id: '1735721434571'
       position:
-        x: 1600
+        x: 1296
         y: 50
       positionAbsolute:
-        x: 1600
+        x: 1296
         y: 50
       selected: false
       type: custom
@@ -441,12 +393,12 @@ workflow:
             detail: high
           enabled: false
       height: 54
-      id: '1735721434573'
+      id: '1735721434572'
       position:
-        x: 1904
+        x: 1600
         y: 150
       positionAbsolute:
-        x: 1904
+        x: 1600
         y: 150
       selected: false
       type: custom
@@ -496,12 +448,12 @@ workflow:
             detail: high
           enabled: false
       height: 54
-      id: '1735721434574'
+      id: '1735721434573'
       position:
-        x: 1904
+        x: 1600
         y: 350
       positionAbsolute:
-        x: 1904
+        x: 1600
         y: 350
       selected: false
       type: custom
@@ -518,23 +470,23 @@ workflow:
           - text
           variable: inquiry_templates
         - value_selector:
-          - '1735721434573'
+          - '1735721434572'
           - text
           variable: reply_analysis
         - value_selector:
-          - '1735721434574'
+          - '1735721434573'
           - text
           variable: follow_up_strategy
         selected: false
         title: 结束
         type: end
       height: 90
-      id: '1735721434575'
+      id: '1735721434574'
       position:
-        x: 2208
+        x: 1904
         y: 250
       positionAbsolute:
-        x: 2208
+        x: 1904
         y: 250
       selected: false
       type: custom
