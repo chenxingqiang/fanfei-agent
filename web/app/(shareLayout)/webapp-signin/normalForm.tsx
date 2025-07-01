@@ -148,13 +148,13 @@ const NormalForm = () => {
               <Link
                 className='system-xs-medium text-text-secondary hover:underline'
                 target='_blank' rel='noopener noreferrer'
-                href='https://keyai.tech/terms'
+                href='https://dify.ai/terms'
               >{t('login.tos')}</Link>
               &nbsp;&&nbsp;
               <Link
                 className='system-xs-medium text-text-secondary hover:underline'
                 target='_blank' rel='noopener noreferrer'
-                href='https://keyai.tech/privacy'
+                href='https://dify.ai/privacy'
               >{t('login.pp')}</Link>
             </div>
             {IS_CE_EDITION && <div className="w-hull system-xs-regular mt-2 block text-text-tertiary">

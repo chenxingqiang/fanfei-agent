@@ -8,7 +8,7 @@ jest.mock('@/context/app-context', () => ({
       name: 'test',
       avatar: null,
       avatar_url: null,
-      email: 'test@keyai.tech',
+      email: 'test@dify.ai',
       is_password_set: false,
       interface_language: 'zh-Hans',
       interface_theme: 'light',

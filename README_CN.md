@@ -1,16 +1,16 @@
 ![cover-v5-optimized](./images/GitHub_README_if.png)
 
 <div align="center">
-  <a href="https://cloud.keyai.tech">Dify 云服务</a> ·
-  <a href="https://docs.keyai.tech/getting-started/install-self-hosted">自托管</a> ·
-  <a href="https://docs.keyai.tech">文档</a> ·
-  <a href="https://keyai.tech/pricing">Dify 产品形态总览</a>
+  <a href="https://cloud.dify.ai">Dify 云服务</a> ·
+  <a href="https://docs.dify.ai/getting-started/install-self-hosted">自托管</a> ·
+  <a href="https://docs.dify.ai">文档</a> ·
+  <a href="https://dify.ai/pricing">Dify 产品形态总览</a>
 </div>
 
 <p align="center">
-    <a href="https://keyai.tech" target="_blank">
+    <a href="https://dify.ai" target="_blank">
         <img alt="Static Badge" src="https://img.shields.io/badge/Product-F04438"></a>
-    <a href="https://keyai.tech/pricing" target="_blank">
+    <a href="https://dify.ai/pricing" target="_blank">
         <img alt="Static Badge" src="https://img.shields.io/badge/free-pricing?logo=free&color=%20%23155EEF&label=pricing&labelColor=%20%23528bff"></a>
     <a href="https://discord.gg/FngNHpbcY7" target="_blank">
         <img src="https://img.shields.io/discord/1082486657678311454?logo=discord&labelColor=%20%235462eb&logoColor=%20%23f5f5f5&color=%20%235462eb"
@@ -62,7 +62,7 @@ Dify 是一个开源的 LLM 应用开发平台。其直观的界面结合了 AI 
   在画布上构建和测试功能强大的 AI 工作流程，利用以下所有功能以及更多功能。
 
 **2. 全面的模型支持**: 
-  与数百种专有/开源 LLMs 以及数十种推理提供商和自托管解决方案无缝集成，涵盖 GPT、Mistral、Llama3 以及任何与 OpenAI API 兼容的模型。完整的支持模型提供商列表可在[此处](https://docs.keyai.tech/getting-started/readme/model-providers)找到。
+  与数百种专有/开源 LLMs 以及数十种推理提供商和自托管解决方案无缝集成，涵盖 GPT、Mistral、Llama3 以及任何与 OpenAI API 兼容的模型。完整的支持模型提供商列表可在[此处](https://docs.dify.ai/getting-started/readme/model-providers)找到。
 
 ![providers-v5](https://github.com/langgenius/dify/assets/13230914/5a17bdbe-097a-4100-8363-40255b70f6e3)
 
@@ -87,7 +87,7 @@ Dify 是一个开源的 LLM 应用开发平台。其直观的界面结合了 AI 
 <table style="width: 100%;">
   <tr>
     <th align="center">功能</th>
-    <th align="center">keyai.tech</th>
+    <th align="center">dify.ai</th>
     <th align="center">LangChain</th>
     <th align="center">Flowise</th>
     <th align="center">OpenAI Assistant API</th>
@@ -153,14 +153,14 @@ Dify 是一个开源的 LLM 应用开发平台。其直观的界面结合了 AI 
 ## 使用 Dify
 
 - **云 </br>**
-我们提供[ Dify 云服务](https://keyai.tech)，任何人都可以零设置尝试。它提供了自部署版本的所有功能，并在沙盒计划中包含 200 次免费的 GPT-4 调用。
+我们提供[ Dify 云服务](https://dify.ai)，任何人都可以零设置尝试。它提供了自部署版本的所有功能，并在沙盒计划中包含 200 次免费的 GPT-4 调用。
 
 - **自托管 Dify 社区版</br>**
 使用这个[入门指南](#快速启动)快速在您的环境中运行 Dify。
-使用我们的[文档](https://docs.keyai.tech)进行进一步的参考和更深入的说明。
+使用我们的[文档](https://docs.dify.ai)进行进一步的参考和更深入的说明。
 
 - **面向企业/组织的 Dify</br>**
-我们提供额外的面向企业的功能。[给我们发送电子邮件](mailto:business@keyai.tech?subject=[GitHub]Business%20License%20Inquiry)讨论企业需求。 </br>
+我们提供额外的面向企业的功能。[给我们发送电子邮件](mailto:business@dify.ai?subject=[GitHub]Business%20License%20Inquiry)讨论企业需求。 </br>
   > 对于使用 AWS 的初创公司和中小型企业，请查看 [AWS Marketplace 上的 Dify 高级版](https://aws.amazon.com/marketplace/pp/prodview-t22mebxzwjhu6)，并使用一键部署到您自己的 AWS VPC。它是一个价格实惠的 AMI 产品，提供了使用自定义徽标和品牌创建应用程序的选项。
 
 ## 保持领先
@@ -192,7 +192,7 @@ docker compose up -d
 
 ### 自定义配置
 
-如果您需要自定义配置，请参考 [.env.example](docker/.env.example) 文件中的注释，并更新 `.env` 文件中对应的值。此外，您可能需要根据您的具体部署环境和需求对 `docker-compose.yaml` 文件本身进行调整，例如更改镜像版本、端口映射或卷挂载。完成任何更改后，请重新运行 `docker-compose up -d`。您可以在[此处](https://docs.keyai.tech/getting-started/install-self-hosted/environments)找到可用环境变量的完整列表。
+如果您需要自定义配置，请参考 [.env.example](docker/.env.example) 文件中的注释，并更新 `.env` 文件中对应的值。此外，您可能需要根据您的具体部署环境和需求对 `docker-compose.yaml` 文件本身进行调整，例如更改镜像版本、端口映射或卷挂载。完成任何更改后，请重新运行 `docker-compose up -d`。您可以在[此处](https://docs.dify.ai/getting-started/install-self-hosted/environments)找到可用环境变量的完整列表。
 
 #### 使用 Helm Chart 部署
 
@@ -253,15 +253,15 @@ docker compose up -d
 我们欢迎您为 Dify 做出贡献，以帮助改善 Dify。包括：提交代码、问题、新想法，或分享您基于 Dify 创建的有趣且有用的 AI 应用程序。同时，我们也欢迎您在不同的活动、会议和社交媒体上分享 Dify。
 
 - [GitHub Discussion](https://github.com/langgenius/dify/discussions). 👉：分享您的应用程序并与社区交流。
-- [GitHub Issues](https://github.com/langgenius/dify/issues)。👉：使用 keyai.tech 时遇到的错误和问题，请参阅[贡献指南](CONTRIBUTING.md)。
-- [电子邮件支持](mailto:hello@keyai.tech?subject=[GitHub]Questions%20About%20Dify)。👉：关于使用 keyai.tech 的问题。
+- [GitHub Issues](https://github.com/langgenius/dify/issues)。👉：使用 dify.ai 时遇到的错误和问题，请参阅[贡献指南](CONTRIBUTING.md)。
+- [电子邮件支持](mailto:hello@dify.ai?subject=[GitHub]Questions%20About%20Dify)。👉：关于使用 dify.ai 的问题。
 - [Discord](https://discord.gg/FngNHpbcY7)。👉：分享您的应用程序并与社区交流。
 - [X(Twitter)](https://twitter.com/dify_ai)。👉：分享您的应用程序并与社区交流。
-- [商业许可](mailto:business@keyai.tech?subject=[GitHub]Business%20License%20Inquiry)。👉：有关商业用途许可 keyai.tech 的商业咨询。
+- [商业许可](mailto:business@dify.ai?subject=[GitHub]Business%20License%20Inquiry)。👉：有关商业用途许可 dify.ai 的商业咨询。
 
 ## 安全问题
 
-为了保护您的隐私，请避免在 GitHub 上发布安全问题。发送问题至 security@keyai.tech，我们将为您做更细致的解答。
+为了保护您的隐私，请避免在 GitHub 上发布安全问题。发送问题至 security@dify.ai，我们将为您做更细致的解答。
 
 ## License
 

@@ -29,7 +29,7 @@ NEXT_PUBLIC_DEPLOY_ENV=DEVELOPMENT
 NEXT_PUBLIC_EDITION=SELF_HOSTED
 # The base URL of console application, refers to the Console base URL of WEB service if console domain is
 # different from api or web app domain.
-# example: http://cloud.keyai.tech/console/api
+# example: http://cloud.dify.ai/console/api
 NEXT_PUBLIC_API_PREFIX=http://localhost:5001/console/api
 # The URL for Web APP, refers to the Web App base URL of WEB service if web app domain is different from
 # console or api domain.
@@ -111,7 +111,7 @@ If you are not familiar with writing tests, here is some code to refer to:
 
 ## Documentation
 
-Visit <https://docs.keyai.tech/getting-started/readme> to view the full documentation.
+Visit <https://docs.dify.ai/getting-started/readme> to view the full documentation.
 
 ## Community
 

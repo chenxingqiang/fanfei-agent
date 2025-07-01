@@ -479,7 +479,7 @@ class UpdateConfig(BaseSettings):
 
     CHECK_UPDATE_URL: str = Field(
         description="URL to check for application updates",
-        default="https://updates.keyai.tech",
+        default="https://updates.dify.ai",
     )
 
 

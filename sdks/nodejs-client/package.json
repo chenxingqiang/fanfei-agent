@@ -1,13 +1,13 @@
 {
   "name": "dify-client",
   "version": "2.3.2",
-  "description": "This is the Node.js SDK for the keyai.tech API, which allows you to easily integrate keyai.tech into your Node.js applications.",
+  "description": "This is the Node.js SDK for the dify.ai API, which allows you to easily integrate dify.ai into your Node.js applications.",
   "main": "index.js",
   "type": "module",
   "types":"index.d.ts",
   "keywords": [
     "Dify",
-    "keyai.tech",
+    "dify.ai",
     "LLM"
   ],
   "author": "Joel",
