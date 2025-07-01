@@ -1,0 +1,471 @@
+app:
+  description: 实现订单管理、状态跟踪、发货通知和客户服务
+  icon: 📦
+  icon_background: '#E8F5E8'
+  mode: workflow
+  name: 订单管理模块
+
+kind: app
+version: 0.1.1
+
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      image:
+        enabled: true
+        number_limits: 5
+        transfer_methods:
+        - local_file
+        - remote_url
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: http-request
+      id: start-to-order-check
+      source: '1735721634567'
+      sourceHandle: source
+      target: '1735721634568'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: if-else
+      id: order-to-status-check
+      source: '1735721634568'
+      sourceHandle: source
+      target: '1735721634569'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: status-to-update-notification
+      source: '1735721634569'
+      sourceHandle: true
+      target: '1735721634570'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: status-to-delay-handling
+      source: '1735721634569'
+      sourceHandle: false
+      target: '1735721634571'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: http-request
+      id: notification-to-send
+      source: '1735721634570'
+      sourceHandle: source
+      target: '1735721634572'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: http-request
+      id: delay-to-escalate
+      source: '1735721634571'
+      sourceHandle: source
+      target: '1735721634573'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: end
+      id: send-to-end
+      source: '1735721634572'
+      sourceHandle: source
+      target: '1735721634574'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: end
+      id: escalate-to-end
+      source: '1735721634573'
+      sourceHandle: source
+      target: '1735721634574'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: 订单号
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: order_id
+        - label: 操作类型
+          options:
+          - 状态更新
+          - 发货通知
+          - 延期处理
+          - 客户查询
+          required: true
+          type: select
+          variable: operation_type
+        - label: 备注信息
+          max_length: 200
+          options: []
+          required: false
+          type: paragraph
+          variable: notes
+      height: 116
+      id: '1735721634567'
+      position:
+        x: 30
+        y: 282
+      positionAbsolute:
+        x: 30
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: ''
+          type: none
+        desc: 查询订单当前状态和详细信息
+        headers: ''
+        method: get
+        params: order_id={{#1735721634567.order_id#}}
+        selected: false
+        timeout:
+          connect: 30
+          read: 60
+          write: 60
+        title: 订单状态查询
+        type: http-request
+        url: http://localhost:5001/api/orders/status
+        variables: []
+      height: 54
+      id: '1735721634568'
+      position:
+        x: 334
+        y: 282
+      positionAbsolute:
+        x: 334
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: normal_progress
+          conditions:
+          - comparison_operator: contains
+            id: '1735721634569-case-normal_progress-condition-1'
+            value: 正常
+            variable_selector:
+            - '1735721634568'
+            - body
+            - status
+          id: normal_progress
+          logical_operator: and
+        desc: 根据订单状态判断处理方式
+        logical_operator: and
+        selected: false
+        title: 订单状态判断
+        type: if-else
+      height: 126
+      id: '1735721634569'
+      position:
+        x: 638
+        y: 282
+      positionAbsolute:
+        x: 638
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成订单状态更新通知内容
+        memory:
+          query_prompt_template: ''
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - id: system
+          role: system
+          text: |
+            你是一个专业的客户服务代表。根据订单信息和当前状态，生成适当的客户通知内容。
+
+            通知类型：
+            1. 订单确认通知
+            2. 生产进度更新
+            3. 发货通知
+            4. 物流跟踪信息
+            5. 交付确认
+
+            通知要求：
+            - 语言专业友好
+            - 信息准确清晰
+            - 包含必要的跟踪信息
+            - 提供联系方式
+        - id: user
+          role: user
+          text: |
+            订单号：{{#1735721634567.order_id#}}
+            订单状态：{{#1735721634568.body#}}
+            操作类型：{{#1735721634567.operation_type#}}
+            备注信息：{{#1735721634567.notes#}}
+
+            请生成相应的客户通知内容。
+        selected: false
+        title: 状态更新通知
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1735721634570'
+      position:
+        x: 942
+        y: 182
+      positionAbsolute:
+        x: 942
+        y: 182
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 处理订单延期或异常情况
+        memory:
+          query_prompt_template: ''
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - id: system
+          role: system
+          text: |
+            你是一个专业的订单管理专家。处理订单延期、异常或问题情况。
+
+            处理原则：
+            1. 分析延期原因
+            2. 评估影响程度
+            3. 制定解决方案
+            4. 准备客户沟通内容
+            5. 设定跟进计划
+
+            输出格式：
+            - 问题分析
+            - 解决方案
+            - 客户沟通建议
+            - 跟进计划
+            - 预期解决时间
+        - id: user
+          role: user
+          text: |
+            订单号：{{#1735721634567.order_id#}}
+            订单状态：{{#1735721634568.body#}}
+            操作类型：{{#1735721634567.operation_type#}}
+            备注信息：{{#1735721634567.notes#}}
+
+            请分析问题并提供解决方案。
+        selected: false
+        title: 延期异常处理
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1735721634571'
+      position:
+        x: 942
+        y: 382
+      positionAbsolute:
+        x: 942
+        y: 382
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: |
+            {
+              "order_id": "{{#1735721634567.order_id#}}",
+              "notification_type": "status_update",
+              "content": "{{#1735721634570.text#}}",
+              "timestamp": "{{#sys.timestamp#}}"
+            }
+          type: json
+        desc: 发送状态更新通知给客户
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          connect: 30
+          read: 60
+          write: 60
+        title: 发送客户通知
+        type: http-request
+        url: http://localhost:5001/api/notifications/send
+        variables: []
+      height: 54
+      id: '1735721634572'
+      position:
+        x: 1246
+        y: 182
+      positionAbsolute:
+        x: 1246
+        y: 182
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: |
+            {
+              "order_id": "{{#1735721634567.order_id#}}",
+              "issue_type": "delay_or_exception",
+              "analysis": "{{#1735721634571.text#}}",
+              "priority": "high",
+              "timestamp": "{{#sys.timestamp#}}"
+            }
+          type: json
+        desc: 上报异常情况给管理层
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          connect: 30
+          read: 60
+          write: 60
+        title: 异常上报
+        type: http-request
+        url: http://localhost:5001/api/escalation/report
+        variables: []
+      height: 54
+      id: '1735721634573'
+      position:
+        x: 1246
+        y: 382
+      positionAbsolute:
+        x: 1246
+        y: 382
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1735721634568'
+          - body
+          variable: order_status
+        - value_selector:
+          - '1735721634570'
+          - text
+          variable: notification_content
+        - value_selector:
+          - '1735721634571'
+          - text
+          variable: issue_analysis
+        selected: false
+        title: 结束
+        type: end
+      height: 90
+      id: '1735721634574'
+      position:
+        x: 1550
+        y: 282
+      positionAbsolute:
+        x: 1550
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244 

@@ -5,14 +5,14 @@ import dayjs from 'dayjs'
 import { RiCloseLine } from '@remixicon/react'
 import Modal from '@/app/components/base/modal'
 import Button from '@/app/components/base/button'
-import type { jinChenFanFeiVersionResponse } from '@/models/common'
+import type { JinChenFanFeiVersionResponse } from '@/models/common'
 import { IS_CE_EDITION } from '@/config'
 import FanfeiLogo from '@/app/components/base/logo/fanfei-logo'
 import { noop } from 'lodash-es'
 import { useGlobalPublicStore } from '@/context/global-public-context'
 
 type IAccountSettingProps = {
-  langeniusVersionInfo: jinChenFanFeiVersionResponse
+  langeniusVersionInfo: JinChenFanFeiVersionResponse
   onCancel: () => void
 }
 
@@ -45,14 +45,14 @@ export default function AccountAbout({
 
           <div className='text-center text-xs font-normal text-text-tertiary'>Version {langeniusVersionInfo?.current_version}</div>
           <div className='flex flex-col items-center gap-2 text-center text-xs font-normal text-text-secondary'>
-            <div>© {dayjs().year()} jinChenFanFei, Inc., Contributors.</div>
+            <div>© {dayjs().year()} JinChenFanFei, Inc., Contributors.</div>
             <div className='text-text-accent'>
               {
                 IS_CE_EDITION
                   ? <Link href={'https://github.com/langgenius/fanfei/blob/main/LICENSE'} target='_blank' rel='noopener noreferrer'>Open Source License</Link>
                   : <>
-                    <Link href='https://fanfei.ai/privacy' target='_blank' rel='noopener noreferrer'>Privacy Policy</Link>,&nbsp;
-                    <Link href='https://fanfei.ai/terms' target='_blank' rel='noopener noreferrer'>Terms of Service</Link>
+                    <Link href='https://keyai.tech/privacy' target='_blank' rel='noopener noreferrer'>Privacy Policy</Link>,&nbsp;
+                    <Link href='https://keyai.tech/terms' target='_blank' rel='noopener noreferrer'>Terms of Service</Link>
                   </>
               }
             </div>

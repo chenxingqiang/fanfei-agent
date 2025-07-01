@@ -398,7 +398,7 @@ const SettingsModal: FC<ISettingsModalProps> = ({
                 <p className={cn('body-xs-regular pb-0.5 text-text-tertiary')}>
                   <Trans
                     i18nKey={`${prefixSettings}.more.privacyPolicyTip`}
-                    components={{ privacyPolicyLink: <Link href={'https://fanfei.ai/privacy'} target='_blank' rel='noopener noreferrer' className='text-text-accent' /> }}
+                    components={{ privacyPolicyLink: <Link href={'https://keyai.tech/privacy'} target='_blank' rel='noopener noreferrer' className='text-text-accent' /> }}
                   />
                 </p>
                 <Input

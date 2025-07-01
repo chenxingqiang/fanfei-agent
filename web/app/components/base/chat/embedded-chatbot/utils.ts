@@ -1,3 +1,3 @@
 export const isFanfei = () => {
-  return document.referrer.includes('fanfei.ai')
+  return document.referrer.includes('keyai.tech')
 }

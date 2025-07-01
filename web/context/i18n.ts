@@ -30,7 +30,7 @@ export const useGetPricingPageLanguage = () => {
   return getPricingPageLanguage(locale)
 }
 
-const defaultDocBaseUrl = 'https://docs.fanfei.ai'
+const defaultDocBaseUrl = 'https://docs.keyai.tech'
 export const useDocLink = (baseUrl?: string): ((path?: string, pathMap?: { [index: string]: string }) => string) => {
   let baseDocUrl = baseUrl || defaultDocBaseUrl
   baseDocUrl = (baseDocUrl.endsWith('/')) ? baseDocUrl.slice(0, -1) : baseDocUrl

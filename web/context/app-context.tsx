@@ -8,7 +8,7 @@ import { fetchAppList } from '@/service/apps'
 import Loading from '@/app/components/base/loading'
 import { fetchCurrentWorkspace, fetchLanggeniusVersion, fetchUserProfile } from '@/service/common'
 import type { App } from '@/types/app'
-import type { ICurrentWorkspace, jinChenFanFeiVersionResponse, UserProfileResponse } from '@/models/common'
+import type { ICurrentWorkspace, JinChenFanFeiVersionResponse, UserProfileResponse } from '@/models/common'
 import MaintenanceNotice from '@/app/components/header/maintenance-notice'
 import { noop } from 'lodash-es'
 
@@ -24,7 +24,7 @@ export type AppContextValue = {
   isCurrentWorkspaceDatasetOperator: boolean
   mutateCurrentWorkspace: VoidFunction
   pageContainerRef: React.RefObject<HTMLDivElement>
-  langeniusVersionInfo: jinChenFanFeiVersionResponse
+  langeniusVersionInfo: JinChenFanFeiVersionResponse
   useSelector: typeof useSelector
   isLoadingCurrentWorkspace: boolean
 }
@@ -89,7 +89,7 @@ export const AppContextProvider: FC<AppContextProviderProps> = ({ children }) =>
   const { data: currentWorkspaceResponse, mutate: mutateCurrentWorkspace, isLoading: isLoadingCurrentWorkspace } = useSWR({ url: '/workspaces/current', params: {} }, fetchCurrentWorkspace)
 
   const [userProfile, setUserProfile] = useState<UserProfileResponse>()
-  const [langeniusVersionInfo, setLangeniusVersionInfo] = useState<jinChenFanFeiVersionResponse>(initialLangeniusVersionInfo)
+  const [langeniusVersionInfo, setLangeniusVersionInfo] = useState<JinChenFanFeiVersionResponse>(initialLangeniusVersionInfo)
   const [currentWorkspace, setCurrentWorkspace] = useState<ICurrentWorkspace>(initialWorkspaceInfo)
   const isCurrentWorkspaceManager = useMemo(() => ['owner', 'admin'].includes(currentWorkspace.role), [currentWorkspace.role])
   const isCurrentWorkspaceOwner = useMemo(() => currentWorkspace.role === 'owner', [currentWorkspace.role])

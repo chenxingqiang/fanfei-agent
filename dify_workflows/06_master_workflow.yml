@@ -1,0 +1,558 @@
+app:
+  description: AI报价系统主工作流，整合基础信息处理、产品分析、供应商沟通、价格计算和订单管理
+  icon: 🏭
+  icon_background: '#F5F5FF'
+  mode: workflow
+  name: AI报价系统主工作流
+
+kind: app
+version: 0.1.1
+
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      image:
+        enabled: true
+        number_limits: 10
+        transfer_methods:
+        - local_file
+        - remote_url
+    opening_statement: '欢迎使用AI报价系统！请提供报价需求信息，系统将自动为您处理整个报价流程。'
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - 我需要为客户报价一批产品
+    - 查询订单状态
+    - 更新报价信息
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: start-to-intent-recognition
+      source: '1735721734567'
+      sourceHandle: source
+      target: '1735721734568'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: if-else
+      id: intent-to-router
+      source: '1735721734568'
+      sourceHandle: source
+      target: '1735721734569'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: http-request
+      id: router-to-basic-info
+      source: '1735721734569'
+      sourceHandle: true
+      target: '1735721734570'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: http-request
+      id: router-to-order-management
+      source: '1735721734569'
+      sourceHandle: false
+      target: '1735721734571'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: http-request
+      id: basic-to-product
+      source: '1735721734570'
+      sourceHandle: source
+      target: '1735721734572'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: http-request
+      id: product-to-supplier
+      source: '1735721734572'
+      sourceHandle: source
+      target: '1735721734573'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: http-request
+      id: supplier-to-pricing
+      source: '1735721734573'
+      sourceHandle: source
+      target: '1735721734574'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: llm
+      id: pricing-to-summary
+      source: '1735721734574'
+      sourceHandle: source
+      target: '1735721734575'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: llm
+      id: order-to-summary
+      source: '1735721734571'
+      sourceHandle: source
+      target: '1735721734575'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: summary-to-end
+      source: '1735721734575'
+      sourceHandle: source
+      target: '1735721734576'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: 用户需求
+          max_length: 500
+          options: []
+          required: true
+          type: paragraph
+          variable: user_request
+        - label: 产品图片
+          options: []
+          required: false
+          type: file
+          variable: product_images
+        - label: 客户信息
+          max_length: 200
+          options: []
+          required: false
+          type: paragraph
+          variable: customer_info
+        - label: 特殊要求
+          max_length: 300
+          options: []
+          required: false
+          type: paragraph
+          variable: special_requirements
+      height: 116
+      id: '1735721734567'
+      position:
+        x: 30
+        y: 282
+      positionAbsolute:
+        x: 30
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 分析用户意图，判断是新报价请求还是订单管理
+        memory:
+          query_prompt_template: ''
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.1
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - id: system
+          role: system
+          text: |
+            你是一个专业的AI助手，负责分析用户意图。根据用户输入，判断用户的需求类型。
+
+            意图分类：
+            1. 新报价请求 - 用户想要获取产品报价
+            2. 订单管理 - 用户想要查询、更新或管理已有订单
+            3. 其他查询 - 其他类型的咨询
+
+            请分析用户需求并返回意图类型，只返回：NEW_QUOTE、ORDER_MANAGEMENT 或 OTHER 中的一个。
+        - id: user
+          role: user
+          text: |
+            用户需求：{{#1735721734567.user_request#}}
+            客户信息：{{#1735721734567.customer_info#}}
+            特殊要求：{{#1735721734567.special_requirements#}}
+
+            请分析用户意图。
+        selected: false
+        title: 意图识别
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1735721734568'
+      position:
+        x: 334
+        y: 282
+      positionAbsolute:
+        x: 334
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: new_quote_flow
+          conditions:
+          - comparison_operator: contains
+            id: '1735721734569-case-new_quote_flow-condition-1'
+            value: NEW_QUOTE
+            variable_selector:
+            - '1735721734568'
+            - text
+          id: new_quote_flow
+          logical_operator: and
+        desc: 根据意图类型路由到不同的处理流程
+        logical_operator: and
+        selected: false
+        title: 流程路由
+        type: if-else
+      height: 126
+      id: '1735721734569'
+      position:
+        x: 638
+        y: 282
+      positionAbsolute:
+        x: 638
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: |
+            {
+              "user_request": "{{#1735721734567.user_request#}}",
+              "customer_info": "{{#1735721734567.customer_info#}}",
+              "special_requirements": "{{#1735721734567.special_requirements#}}"
+            }
+          type: json
+        desc: 调用基础信息处理工作流
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          connect: 60
+          read: 120
+          write: 60
+        title: 基础信息处理
+        type: http-request
+        url: http://localhost:5001/api/workflows/basic-info-processing
+        variables: []
+      height: 54
+      id: '1735721734570'
+      position:
+        x: 942
+        y: 182
+      positionAbsolute:
+        x: 942
+        y: 182
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: |
+            {
+              "user_request": "{{#1735721734567.user_request#}}",
+              "customer_info": "{{#1735721734567.customer_info#}}"
+            }
+          type: json
+        desc: 调用订单管理工作流
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          connect: 60
+          read: 120
+          write: 60
+        title: 订单管理
+        type: http-request
+        url: http://localhost:5001/api/workflows/order-management
+        variables: []
+      height: 54
+      id: '1735721734571'
+      position:
+        x: 942
+        y: 382
+      positionAbsolute:
+        x: 942
+        y: 382
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: |
+            {
+              "basic_info_result": "{{#1735721734570.body#}}",
+              "product_images": "{{#1735721734567.product_images#}}"
+            }
+          type: json
+        desc: 调用产品信息处理工作流
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          connect: 60
+          read: 120
+          write: 60
+        title: 产品信息处理
+        type: http-request
+        url: http://localhost:5001/api/workflows/product-analysis
+        variables: []
+      height: 54
+      id: '1735721734572'
+      position:
+        x: 1246
+        y: 182
+      positionAbsolute:
+        x: 1246
+        y: 182
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: |
+            {
+              "product_analysis_result": "{{#1735721734572.body#}}"
+            }
+          type: json
+        desc: 调用供应商沟通工作流
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          connect: 60
+          read: 120
+          write: 60
+        title: 供应商沟通
+        type: http-request
+        url: http://localhost:5001/api/workflows/supplier-communication
+        variables: []
+      height: 54
+      id: '1735721734573'
+      position:
+        x: 1550
+        y: 182
+      positionAbsolute:
+        x: 1550
+        y: 182
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: |
+            {
+              "supplier_communication_result": "{{#1735721734573.body#}}"
+            }
+          type: json
+        desc: 调用价格计算工作流
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          connect: 60
+          read: 120
+          write: 60
+        title: 价格计算
+        type: http-request
+        url: http://localhost:5001/api/workflows/pricing-calculation
+        variables: []
+      height: 54
+      id: '1735721734574'
+      position:
+        x: 1854
+        y: 182
+      positionAbsolute:
+        x: 1854
+        y: 182
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 汇总整个流程的结果，生成最终报告
+        memory:
+          query_prompt_template: ''
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - id: system
+          role: system
+          text: |
+            你是一个专业的报价系统总结专家。根据各个工作流的处理结果，生成完整的处理报告。
+
+            报告内容应包括：
+            1. 处理流程总结
+            2. 关键结果展示
+            3. 下一步建议
+            4. 联系信息
+
+            语言要求：
+            - 专业清晰
+            - 结构化展示
+            - 突出重点信息
+        - id: user
+          role: user
+          text: |
+            用户原始需求：{{#1735721734567.user_request#}}
+            意图分析：{{#1735721734568.text#}}
+            处理结果：{{#1735721734574.body#}}{{#1735721734571.body#}}
+
+            请生成完整的处理报告。
+        selected: false
+        title: 结果汇总
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1735721734575'
+      position:
+        x: 2158
+        y: 282
+      positionAbsolute:
+        x: 2158
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1735721734575'
+          - text
+          variable: final_report
+        - value_selector:
+          - '1735721734568'
+          - text
+          variable: user_intent
+        - value_selector:
+          - '1735721734574'
+          - body
+          variable: workflow_results
+        selected: false
+        title: 结束
+        type: end
+      height: 90
+      id: '1735721734576'
+      position:
+        x: 2462
+        y: 282
+      positionAbsolute:
+        x: 2462
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244 

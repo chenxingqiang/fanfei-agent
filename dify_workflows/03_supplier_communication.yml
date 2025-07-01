@@ -1,0 +1,542 @@
+app:
+  description: 实现供应商优先级排序、自动生成询价模板并监控客服回复
+  icon: 💬
+  icon_background: '#F0F8E8'
+  mode: workflow
+  name: 客服沟通与信息确认模块
+
+kind: app
+version: 0.1.2
+
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1735721434567-source-1735721434568-target
+      source: '1735721434567'
+      sourceHandle: source
+      target: '1735721434568'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 1735721434568-source-1735721434569-target
+      source: '1735721434568'
+      sourceHandle: source
+      target: '1735721434569'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: http-request
+      id: 1735721434569-source-1735721434570-target
+      source: '1735721434569'
+      sourceHandle: source
+      target: '1735721434570'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: parameter-extractor
+      id: 1735721434570-source-1735721434571-target
+      source: '1735721434570'
+      sourceHandle: source
+      target: '1735721434571'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: parameter-extractor
+        targetType: if-else
+      id: 1735721434571-source-1735721434572-target
+      source: '1735721434571'
+      sourceHandle: source
+      target: '1735721434572'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: 1735721434572-true-1735721434573-target
+      source: '1735721434572'
+      sourceHandle: 'true'
+      target: '1735721434573'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: 1735721434572-false-1735721434574-target
+      source: '1735721434572'
+      sourceHandle: 'false'
+      target: '1735721434574'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1735721434573-source-1735721434575-target
+      source: '1735721434573'
+      sourceHandle: source
+      target: '1735721434575'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1735721434574-source-1735721434575-target
+      source: '1735721434574'
+      sourceHandle: source
+      target: '1735721434575'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 输入供应商搜索结果信息
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: 推荐供应商列表
+          max_length: 5000
+          required: true
+          type: paragraph
+          variable: suppliers_list
+        - label: 产品规格信息
+          max_length: 2000
+          required: true
+          type: paragraph
+          variable: product_specs
+        - label: 需求数量
+          required: true
+          type: number
+          variable: quantity_needed
+        - default: 7
+          label: 期望交期(天)
+          required: true
+          type: number
+          variable: delivery_days
+      height: 116
+      id: '1735721434567'
+      position:
+        x: 80
+        y: 50
+      positionAbsolute:
+        x: 80
+        y: 50
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据供应商质量、价格等因素进行优先级排序
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - role: system
+          text: |-
+            你是专业的供应商评估专家。请根据以下评估标准对供应商进行优先级排序：
+
+            评估标准（权重）：
+            1. 产品匹配度（30%）- 产品规格、质量、外观匹配程度
+            2. 供应商信誉（25%）- 评分、认证、交易历史
+            3. 价格竞争力（20%）- 报价合理性、性价比
+            4. 响应速度（15%）- 客服响应时间、沟通效率
+            5. 交期保障（10%）- 库存情况、生产周期
+
+            输出要求：
+            1. 按优先级排序的供应商列表（前10名）
+            2. 每个供应商的评分理由
+            3. 风险提示
+            4. 建议的询价策略
+
+            以JSON格式返回结果。
+        - role: user
+          text: |-
+            供应商搜索结果：{{#1735721434567.suppliers_list#}}
+
+            产品规格要求：{{#1735721434567.product_specs#}}
+
+            请进行供应商优先级排序。
+        selected: false
+        title: 供应商优先级排序
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 54
+      id: '1735721434568'
+      position:
+        x: 384
+        y: 50
+      positionAbsolute:
+        x: 384
+        y: 50
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 为不同类型供应商生成专业询价模板
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - role: system
+          text: |-
+            你是专业的B2B询价专家。根据供应商类型和产品特点，生成专业的询价模板：
+
+            询价模板要包含：
+            1. 友好的开场白
+            2. 公司简介和采购背景
+            3. 产品详细规格要求
+            4. 数量和交期要求
+            5. 质量标准和认证要求
+            6. 包装和运输要求
+            7. 付款方式偏好
+            8. 期望的回复时间
+            9. 后续合作展望
+
+            模板风格：
+            - 工厂类供应商：强调技术规格、生产能力
+            - 贸易商：强调服务质量、价格优势
+            - 品牌商：强调品牌合作、长期关系
+
+            请生成3个不同风格的询价模板。
+        - role: user
+          text: |-
+            排序后的供应商信息：{{#1735721434568.text#}}
+
+            产品规格：{{#1735721434567.product_specs#}}
+            需求数量：{{#1735721434567.quantity_needed#}}
+            期望交期：{{#1735721434567.delivery_days#}}天
+
+            请生成询价模板。
+        selected: false
+        title: 询价模板生成
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 54
+      id: '1735721434569'
+      position:
+        x: 688
+        y: 50
+      positionAbsolute:
+        x: 688
+        y: 50
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config:
+            api_key: '{{#sys.api_key#}}'
+          type: api-key
+        body:
+          data: |-
+            {
+              "suppliers": "{{#1735721434568.text#}}",
+              "inquiry_templates": "{{#1735721434569.text#}}",
+              "send_method": "batch",
+              "track_replies": true,
+              "timeout_hours": 24
+            }
+          type: json
+        desc: 批量发送询价并开始监控供应商回复
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          max_connect_timeout: 30
+          max_read_timeout: 30
+          max_write_timeout: 30
+        title: 发送询价监控回复
+        type: http-request
+        url: '{{#sys.inquiry_api#}}/send-and-monitor'
+        variables: []
+      height: 54
+      id: '1735721434570'
+      position:
+        x: 992
+        y: 50
+      positionAbsolute:
+        x: 992
+        y: 50
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        desc: 提取回复监控状态和响应信息
+        instruction: |-
+          从询价监控系统的响应中提取以下参数：
+          1. 发送状态 (send_status)
+          2. 已回复供应商数量 (replied_count)
+          3. 回复内容摘要 (reply_summary)
+          4. 待跟进供应商列表 (pending_suppliers)
+        parameters:
+        - name: send_status
+          required: true
+          type: string
+        - name: replied_count
+          required: true
+          type: number
+        - name: reply_summary
+          required: false
+          type: string
+        - name: pending_suppliers
+          required: false
+          type: string
+        selected: false
+        title: 提取回复状态
+        type: parameter-extractor
+      height: 54
+      id: '1735721434571'
+      position:
+        x: 1296
+        y: 50
+      positionAbsolute:
+        x: 1296
+        y: 50
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: has_replies
+          conditions:
+          - comparison_operator: contains
+            id: '1735721434570-case-has_replies-condition-1'
+            value: success
+            variable_selector:
+            - '1735721434570'
+            - body
+            - status
+          id: has_replies
+          logical_operator: and
+        desc: 判断是否有供应商回复
+        logical_operator: and
+        selected: false
+        title: 回复状态判断
+        type: if-else
+      height: 126
+      id: '1735721434572'
+      position:
+        x: 1600
+        y: 50
+      positionAbsolute:
+        x: 1600
+        y: 50
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 分析供应商回复内容，提取关键信息
+        model:
+          completion_params:
+            temperature: 0.1
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - role: system
+          text: |-
+            你是专业的供应商回复分析师。请分析供应商的回复内容，提取以下关键信息：
+
+            提取信息：
+            1. 报价信息（单价、总价、价格阶梯）
+            2. 产品规格确认情况
+            3. 交期承诺
+            4. 最小订购量(MOQ)
+            5. 付款条件
+            6. 包装方式
+            7. 运输方案
+            8. 质量保证
+            9. 样品政策
+            10. 特殊要求的回应
+
+            分析结果：
+            1. 回复质量评分（1-10分）
+            2. 信息完整度评估
+            3. 价格竞争力分析
+            4. 风险提示
+            5. 建议后续行动
+
+            以结构化JSON格式返回分析结果。
+        - role: user
+          text: |-
+            供应商回复信息：{{#1735721434570.body#}}
+
+            请分析回复内容并提取关键信息。
+        selected: false
+        title: 回复内容分析
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 54
+      id: '1735721434573'
+      position:
+        x: 1904
+        y: 150
+      positionAbsolute:
+        x: 1904
+        y: 150
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成跟进方案和下一步行动计划
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - role: system
+          text: |-
+            你是客户跟进策略专家。基于当前情况生成跟进方案：
+
+            跟进策略：
+            1. 对未回复供应商的催促模板
+            2. 对已回复供应商的深度询问
+            3. 价格谈判策略
+            4. 样品申请建议
+            5. 质量确认方案
+
+            输出内容：
+            1. 跟进时间安排
+            2. 沟通重点和话术
+            3. 风险控制措施
+            4. 决策节点设置
+            5. 备选方案准备
+
+            以实用的行动指南格式返回。
+        - role: user
+          text: |-
+            发送状态：{{#1735721434570.body#}}
+
+            请生成跟进策略和行动计划。
+        selected: false
+        title: 跟进策略制定
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 54
+      id: '1735721434574'
+      position:
+        x: 1904
+        y: 350
+      positionAbsolute:
+        x: 1904
+        y: 350
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        desc: 输出沟通结果和下一步行动
+        outputs:
+        - value_selector:
+          - '1735721434568'
+          - text
+          variable: supplier_ranking
+        - value_selector:
+          - '1735721434569'
+          - text
+          variable: inquiry_templates
+        - value_selector:
+          - '1735721434573'
+          - text
+          variable: reply_analysis
+        - value_selector:
+          - '1735721434574'
+          - text
+          variable: follow_up_strategy
+        selected: false
+        title: 结束
+        type: end
+      height: 90
+      id: '1735721434575'
+      position:
+        x: 2208
+        y: 250
+      positionAbsolute:
+        x: 2208
+        y: 250
+      selected: false
+      type: custom
+      width: 244
+  notes: ''

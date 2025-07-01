@@ -36,8 +36,8 @@ const Pricing: FC<Props> = ({
 
   const pricingPageLanguage = useGetPricingPageLanguage()
   const pricingPageURL = pricingPageLanguage
-    ? `https://fanfei.ai/${pricingPageLanguage}/pricing#plans-and-features`
-    : 'https://fanfei.ai/pricing#plans-and-features'
+    ? `https://keyai.tech/${pricingPageLanguage}/pricing#plans-and-features`
+    : 'https://keyai.tech/pricing#plans-and-features'
 
   return createPortal(
     <div

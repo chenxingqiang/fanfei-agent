@@ -1,0 +1,491 @@
+app:
+  description: 自动获取产品详情并通过图像识别在1688平台进行供应商搜索
+  icon: 🔍
+  icon_background: '#E6F3FF'
+  mode: workflow
+  name: 产品信息处理模块
+
+kind: app
+version: 0.1.1
+
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      image:
+        enabled: true
+        number_limits: 5
+        transfer_methods:
+        - local_file
+        - remote_url
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: http-request
+      id: 1735721334567-source-1735721334568-target
+      source: '1735721334567'
+      sourceHandle: source
+      target: '1735721334568'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1735721334567-source-1735721334570-target
+      source: '1735721334567'
+      sourceHandle: source
+      target: '1735721334570'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: llm
+      id: 1735721334568-source-1735721334569-target
+      source: '1735721334568'
+      sourceHandle: source
+      target: '1735721334569'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 1735721334569-source-1735721334571-target
+      source: '1735721334569'
+      sourceHandle: source
+      target: '1735721334571'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 1735721334570-source-1735721334571-target
+      source: '1735721334570'
+      sourceHandle: source
+      target: '1735721334571'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: http-request
+      id: 1735721334571-source-1735721334572-target
+      source: '1735721334571'
+      sourceHandle: source
+      target: '1735721334572'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: llm
+      id: 1735721334572-source-1735721334573-target
+      source: '1735721334572'
+      sourceHandle: source
+      target: '1735721334573'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1735721334573-source-1735721334574-target
+      source: '1735721334573'
+      sourceHandle: source
+      target: '1735721334574'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 输入产品详情页信息
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: 产品详情页URL
+          max_length: 500
+          required: true
+          type: text-input
+          variable: product_detail_url
+        - label: 产品主图
+          required: true
+          type: file
+          variable: product_image
+        - label: 补充搜索关键词
+          max_length: 200
+          required: false
+          type: text-input
+          variable: search_keywords
+      height: 116
+      id: '1735721334567'
+      position:
+        x: 80
+        y: 50
+      positionAbsolute:
+        x: 80
+        y: 50
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: {}
+          type: no-auth
+        body:
+          data: ''
+          type: none
+        desc: 获取产品详情页的完整信息
+        headers: 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        method: get
+        params: ''
+        selected: false
+        timeout:
+          max_connect_timeout: 30
+          max_read_timeout: 30
+          max_write_timeout: 30
+        title: 产品详情提取
+        type: http-request
+        url: '{{#1735721334567.product_detail_url#}}'
+        variables: []
+      height: 54
+      id: '1735721334568'
+      position:
+        x: 384
+        y: 50
+      positionAbsolute:
+        x: 384
+        y: 50
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 使用AI解析产品详情页，提取规格信息
+        model:
+          completion_params:
+            temperature: 0.1
+          mode: chat
+          name: gpt-4-vision-preview
+          provider: openai
+        prompt_template:
+        - role: system
+          text: |-
+            你是专业的产品规格分析师。请仔细分析产品详情页内容，提取以下关键信息：
+
+            必须提取的信息：
+            1. 产品名称和型号
+            2. 材质/材料
+            3. 尺寸规格（长/宽/高/重量）
+            4. 颜色/款式选项
+            5. 性能指标和技术参数
+            6. 包装规格
+            7. 适用场景/用途
+            8. 品牌信息
+            9. 产品类别
+            10. 质量标准/认证
+
+            请以结构化JSON格式返回，如果某项信息缺失，请标注为'未知'。
+        - role: user
+          text: |-
+            产品详情页内容：{{#1735721334568.body#}}
+
+            请分析并提取产品规格信息。
+        selected: false
+        title: 产品规格解析
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 54
+      id: '1735721334569'
+      position:
+        x: 688
+        y: 50
+      positionAbsolute:
+        x: 688
+        y: 50
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 分析产品主图，提取视觉特征
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: gpt-4-vision-preview
+          provider: openai
+        prompt_template:
+        - role: system
+          text: |-
+            你是专业的产品图像分析师。请分析产品图像，提取以下信息：
+
+            1. 产品外观描述
+            2. 主要颜色
+            3. 形状特征
+            4. 材质质感
+            5. 使用场景
+            6. 关键视觉元素
+            7. 品牌标识
+            8. 包装方式
+
+            请生成适合在1688平台搜索的关键词组合，包括：
+            - 产品类别关键词
+            - 材质关键词
+            - 外观特征关键词
+            - 功能用途关键词
+
+            以JSON格式返回分析结果。
+        - role: user
+          text: |-
+            请分析这个产品图像，补充关键词：{{#1735721334567.search_keywords#}}
+
+            [图像: {{#1735721334567.product_image#}}]
+        selected: false
+        title: 图像分析
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: true
+      height: 54
+      id: '1735721334570'
+      position:
+        x: 384
+        y: 250
+      positionAbsolute:
+        x: 384
+        y: 250
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 结合产品规格和图像分析，生成1688搜索策略
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - role: system
+          text: |-
+            你是1688平台搜索专家。基于产品规格分析和图像分析结果，生成最优的搜索策略：
+
+            生成内容包括：
+            1. 主要搜索关键词（3-5个）
+            2. 备选搜索关键词（5-8个）
+            3. 产品类目筛选建议
+            4. 价格范围预估
+            5. 供应商类型偏好（工厂/贸易商）
+            6. 地区偏好
+
+            搜索策略要考虑：
+            - 关键词的搜索量和竞争度
+            - 产品的专业性和通用性
+            - 价格敏感度
+            - 质量要求
+
+            以JSON格式返回策略建议。
+        - role: user
+          text: |-
+            产品规格信息：{{#1735721334569.text#}}
+
+            图像分析结果：{{#1735721334570.text#}}
+
+            请生成1688搜索策略。
+        selected: false
+        title: 搜索策略生成
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 54
+      id: '1735721334571'
+      position:
+        x: 992
+        y: 150
+      positionAbsolute:
+        x: 992
+        y: 150
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config:
+            api_key: '{{#sys.api_key#}}'
+          type: api-key
+        body:
+          data: |-
+            {
+              "search_type": "hybrid",
+              "image_search": {
+                "image_url": "{{#1735721334567.product_image#}}",
+                "similarity_threshold": 0.7
+              },
+              "keyword_search": {
+                "keywords": "{{#1735721334571.text#}}",
+                "category_filter": true,
+                "price_range": "auto"
+              },
+              "result_limit": 50,
+              "sort_by": ["relevance", "sales", "price"]
+            }
+          type: json
+        desc: 在1688平台执行图搜和关键词搜索
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          max_connect_timeout: 60
+          max_read_timeout: 60
+          max_write_timeout: 60
+        title: 供应商搜索
+        type: http-request
+        url: '{{#sys.search_api#}}/1688/search'
+        variables: []
+      height: 54
+      id: '1735721334572'
+      position:
+        x: 1296
+        y: 150
+      positionAbsolute:
+        x: 1296
+        y: 150
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 分析搜索结果质量和相关性
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - role: system
+          text: |-
+            你是供应商搜索结果分析专家。请评估搜索结果的质量和相关性：
+
+            分析维度：
+            1. 产品匹配度（外观、规格、功能）
+            2. 供应商质量（认证、评分、历史）
+            3. 价格合理性
+            4. 库存充足性
+            5. 响应速度
+            6. 地理位置优势
+
+            输出建议：
+            1. 推荐的前10个供应商
+            2. 各供应商的优势说明
+            3. 风险提示
+            4. 询价优先级
+
+            以结构化JSON格式返回分析结果。
+        - role: user
+          text: |-
+            原始产品信息：{{#1735721334569.text#}}
+
+            搜索结果：{{#1735721334572.body#}}
+
+            请分析并推荐优质供应商。
+        selected: false
+        title: 搜索结果分析
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 54
+      id: '1735721334573'
+      position:
+        x: 1600
+        y: 150
+      positionAbsolute:
+        x: 1600
+        y: 150
+      selected: false
+      type: custom
+      width: 244
+    - data:
+        desc: 输出分析结果
+        outputs:
+        - value_selector:
+          - '1735721334569'
+          - text
+          variable: product_specs
+        - value_selector:
+          - '1735721334570'
+          - text
+          variable: image_features
+        - value_selector:
+          - '1735721334571'
+          - text
+          variable: search_strategy
+        - value_selector:
+          - '1735721334573'
+          - text
+          variable: recommended_suppliers
+        selected: false
+        title: 结束
+        type: end
+      height: 90
+      id: '1735721334574'
+      position:
+        x: 1904
+        y: 150
+      positionAbsolute:
+        x: 1904
+        y: 150
+      selected: false
+      type: custom
+      width: 244
+  notes: '' 

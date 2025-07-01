@@ -40,7 +40,7 @@ export type UserProfileOriginResponse = {
   headers: any
 }
 
-export type jinChenFanFeiVersionResponse = {
+export type JinChenFanFeiVersionResponse = {
   current_version: string
   latest_version: string
   version: string

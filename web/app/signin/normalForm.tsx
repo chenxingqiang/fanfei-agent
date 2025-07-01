@@ -188,13 +188,13 @@ const NormalForm = () => {
               <Link
                 className='system-xs-medium text-text-secondary hover:underline'
                 target='_blank' rel='noopener noreferrer'
-                href='https://fanfei.ai/terms'
+                href='https://keyai.tech/terms'
               >{t('login.tos')}</Link>
               &nbsp;&&nbsp;
               <Link
                 className='system-xs-medium text-text-secondary hover:underline'
                 target='_blank' rel='noopener noreferrer'
-                href='https://fanfei.ai/privacy'
+                href='https://keyai.tech/privacy'
               >{t('login.pp')}</Link>
             </div>
             {IS_CE_EDITION && <div className="w-hull system-xs-regular mt-2 block text-text-tertiary">

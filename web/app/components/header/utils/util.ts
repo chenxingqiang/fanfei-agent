@@ -21,5 +21,5 @@ export const mailToSupport = (account: string, plan: string, version: string) =>
     Platform:
     Problem Description:
   `
-  return generateMailToLink('support@fanfei.ai', subject, body)
+  return generateMailToLink('support@keyai.tech', subject, body)
 }

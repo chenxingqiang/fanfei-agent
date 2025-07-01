@@ -1,20 +1,20 @@
 ![cover-v5-optimized](./images/GitHub_README_if.png)
 
 <p align="center">
-  📌 <a href="https://dify.ai/blog/introducing-dify-workflow-file-upload-a-demo-on-ai-podcast">Introducing Dify Workflow File Upload: Recreate Google NotebookLM Podcast</a>
+  📌 <a href="https://keyai.tech/blog/introducing-dify-workflow-file-upload-a-demo-on-ai-podcast">Introducing Dify Workflow File Upload: Recreate Google NotebookLM Podcast</a>
 </p>
 
 <p align="center">
-  <a href="https://cloud.dify.ai">Dify Cloud</a> ·
-  <a href="https://docs.dify.ai/getting-started/install-self-hosted">Self-hosting</a> ·
-  <a href="https://docs.dify.ai">Documentation</a> ·
-  <a href="https://dify.ai/pricing">Dify edition overview</a>
+  <a href="https://cloud.keyai.tech">Dify Cloud</a> ·
+  <a href="https://docs.keyai.tech/getting-started/install-self-hosted">Self-hosting</a> ·
+  <a href="https://docs.keyai.tech">Documentation</a> ·
+  <a href="https://keyai.tech/pricing">Dify edition overview</a>
 </p>
 
 <p align="center">
-    <a href="https://dify.ai" target="_blank">
+    <a href="https://keyai.tech" target="_blank">
         <img alt="Static Badge" src="https://img.shields.io/badge/Product-F04438"></a>
-    <a href="https://dify.ai/pricing" target="_blank">
+    <a href="https://keyai.tech/pricing" target="_blank">
         <img alt="Static Badge" src="https://img.shields.io/badge/free-pricing?logo=free&color=%20%23155EEF&label=pricing&labelColor=%20%23528bff"></a>
     <a href="https://discord.gg/FngNHpbcY7" target="_blank">
         <img src="https://img.shields.io/discord/1082486657678311454?logo=discord&labelColor=%20%235462eb&logoColor=%20%23f5f5f5&color=%20%235462eb"
@@ -78,9 +78,9 @@ After running, you can access the Dify dashboard in your browser at [http://loca
 
 #### Seeking help
 
-Please refer to our [FAQ](https://docs.dify.ai/getting-started/install-self-hosted/faqs) if you encounter problems setting up Dify. Reach out to [the community and us](#community--contact) if you are still having issues.
+Please refer to our [FAQ](https://docs.keyai.tech/getting-started/install-self-hosted/faqs) if you encounter problems setting up Dify. Reach out to [the community and us](#community--contact) if you are still having issues.
 
-> If you'd like to contribute to Dify or do additional development, refer to our [guide to deploying from source code](https://docs.dify.ai/getting-started/install-self-hosted/local-source-code)
+> If you'd like to contribute to Dify or do additional development, refer to our [guide to deploying from source code](https://docs.keyai.tech/getting-started/install-self-hosted/local-source-code)
 
 ## Key features
 
@@ -88,7 +88,7 @@ Please refer to our [FAQ](https://docs.dify.ai/getting-started/install-self-host
 Build and test powerful AI workflows on a visual canvas, leveraging all the following features and beyond.
 
 **2. Comprehensive model support**:
-Seamless integration with hundreds of proprietary / open-source LLMs from dozens of inference providers and self-hosted solutions, covering GPT, Mistral, Llama3, and any OpenAI API-compatible models. A full list of supported model providers can be found [here](https://docs.dify.ai/getting-started/readme/model-providers).
+Seamless integration with hundreds of proprietary / open-source LLMs from dozens of inference providers and self-hosted solutions, covering GPT, Mistral, Llama3, and any OpenAI API-compatible models. A full list of supported model providers can be found [here](https://docs.keyai.tech/getting-started/readme/model-providers).
 
 ![providers-v5](https://github.com/langgenius/dify/assets/13230914/5a17bdbe-097a-4100-8363-40255b70f6e3)
 
@@ -112,7 +112,7 @@ All of Dify's offerings come with corresponding APIs, so you could effortlessly 
 <table style="width: 100%;">
   <tr>
     <th align="center">Feature</th>
-    <th align="center">Dify.AI</th>
+    <th align="center">keyai.tech</th>
     <th align="center">LangChain</th>
     <th align="center">Flowise</th>
     <th align="center">OpenAI Assistants API</th>
@@ -178,14 +178,14 @@ All of Dify's offerings come with corresponding APIs, so you could effortlessly 
 ## Using Dify
 
 - **Cloud </br>**
-  We host a [Dify Cloud](https://dify.ai) service for anyone to try with zero setup. It provides all the capabilities of the self-deployed version, and includes 200 free GPT-4 calls in the sandbox plan.
+  We host a [Dify Cloud](https://keyai.tech) service for anyone to try with zero setup. It provides all the capabilities of the self-deployed version, and includes 200 free GPT-4 calls in the sandbox plan.
 
 - **Self-hosting Dify Community Edition</br>**
   Quickly get Dify running in your environment with this [starter guide](#quick-start).
-  Use our [documentation](https://docs.dify.ai) for further references and more in-depth instructions.
+  Use our [documentation](https://docs.keyai.tech) for further references and more in-depth instructions.
 
 - **Dify for enterprise / organizations</br>**
-  We provide additional enterprise-centric features. [Log your questions for us through this chatbot](https://udify.app/chat/22L1zSxg6yW1cWQg) or [send us an email](mailto:business@dify.ai?subject=[GitHub]Business%20License%20Inquiry) to discuss enterprise needs. </br>
+  We provide additional enterprise-centric features. [Log your questions for us through this chatbot](https://udify.app/chat/22L1zSxg6yW1cWQg) or [send us an email](mailto:business@keyai.tech?subject=[GitHub]Business%20License%20Inquiry) to discuss enterprise needs. </br>
   > For startups and small businesses using AWS, check out [Dify Premium on AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-t22mebxzwjhu6) and deploy it to your own AWS VPC with one click. It's an affordable AMI offering with the option to create apps with custom logo and branding.
 
 ## Staying ahead
@@ -196,7 +196,7 @@ Star Dify on GitHub and be instantly notified of new releases.
 
 ## Advanced Setup
 
-If you need to customize the configuration, please refer to the comments in our [.env.example](docker/.env.example) file and update the corresponding values in your `.env` file. Additionally, you might need to make adjustments to the `docker-compose.yaml` file itself, such as changing image versions, port mappings, or volume mounts, based on your specific deployment environment and requirements. After making any changes, please re-run `docker-compose up -d`. You can find the full list of available environment variables [here](https://docs.dify.ai/getting-started/install-self-hosted/environments).
+If you need to customize the configuration, please refer to the comments in our [.env.example](docker/.env.example) file and update the corresponding values in your `.env` file. Additionally, you might need to make adjustments to the `docker-compose.yaml` file itself, such as changing image versions, port mappings, or volume mounts, based on your specific deployment environment and requirements. After making any changes, please re-run `docker-compose up -d`. You can find the full list of available environment variables [here](https://docs.keyai.tech/getting-started/install-self-hosted/environments).
 
 If you'd like to configure a highly-available setup, there are community-contributed [Helm Charts](https://helm.sh/) and YAML files which allow Dify to be deployed on Kubernetes.
 
@@ -245,7 +245,7 @@ At the same time, please consider supporting Dify by sharing it on social media 
 ## Community & contact
 
 - [GitHub Discussion](https://github.com/langgenius/dify/discussions). Best for: sharing feedback and asking questions.
-- [GitHub Issues](https://github.com/langgenius/dify/issues). Best for: bugs you encounter using Dify.AI, and feature proposals. See our [Contribution Guide](https://github.com/langgenius/dify/blob/main/CONTRIBUTING.md).
+- [GitHub Issues](https://github.com/langgenius/dify/issues). Best for: bugs you encounter using keyai.tech, and feature proposals. See our [Contribution Guide](https://github.com/langgenius/dify/blob/main/CONTRIBUTING.md).
 - [Discord](https://discord.gg/FngNHpbcY7). Best for: sharing your applications and hanging out with the community.
 - [X(Twitter)](https://twitter.com/dify_ai). Best for: sharing your applications and hanging out with the community.
 
@@ -261,7 +261,7 @@ At the same time, please consider supporting Dify by sharing it on social media 
 
 ## Security disclosure
 
-To protect your privacy, please avoid posting security issues on GitHub. Instead, send your questions to security@dify.ai and we will provide you with a more detailed answer.
+To protect your privacy, please avoid posting security issues on GitHub. Instead, send your questions to security@keyai.tech and we will provide you with a more detailed answer.
 
 ## License
 

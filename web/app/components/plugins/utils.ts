@@ -22,5 +22,5 @@ export const getDocsUrl = (locale: string, path: string) => {
   else if (locale === LanguagesSupported[7])
     localePath = 'ja-jp'
 
-  return `https://docs.fanfei.ai/${localePath}${path}`
+  return `https://docs.keyai.tech/${localePath}${path}`
 }

@@ -4,7 +4,7 @@ import requests
 
 
 class DifyClient:
-    def __init__(self, api_key, base_url: str = "https://api.dify.ai/v1"):
+    def __init__(self, api_key, base_url: str = "https://api.keyai.tech/v1"):
         self.api_key = api_key
         self.base_url = base_url
 
@@ -162,7 +162,7 @@ class KnowledgeBaseClient(DifyClient):
     def __init__(
         self,
         api_key,
-        base_url: str = "https://api.dify.ai/v1",
+        base_url: str = "https://api.keyai.tech/v1",
         dataset_id: str | None = None,
     ):
         """
@@ -170,7 +170,7 @@ class KnowledgeBaseClient(DifyClient):
 
         Args:
             api_key (str): API key of Dify.
-            base_url (str, optional): Base URL of Dify API. Defaults to 'https://api.dify.ai/v1'.
+            base_url (str, optional): Base URL of Dify API. Defaults to 'https://api.keyai.tech/v1'.
             dataset_id (str, optional): ID of the dataset. Defaults to None. You don't need this if you just want to
                 create a new dataset. or list datasets. otherwise you need to set this.
         """

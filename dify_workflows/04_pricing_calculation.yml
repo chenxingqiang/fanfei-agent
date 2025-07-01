@@ -1,0 +1,453 @@
+app:
+  description: 实现产品成本计算、物流费用计算、利润分析和最终报价生成
+  icon: 💰
+  icon_background: '#FFF2E6'
+  mode: workflow
+  name: 价格计算模块
+
+kind: app
+version: 0.1.1
+
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: start-to-cost-calculation
+      source: '1735721534567'
+      sourceHandle: source
+      target: '1735721534568'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: knowledge-retrieval
+      id: cost-to-logistics
+      source: '1735721534568'
+      sourceHandle: source
+      target: '1735721534569'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: logistics-to-profit
+      source: '1735721534569'
+      sourceHandle: source
+      target: '1735721534570'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: profit-to-quote
+      source: '1735721534570'
+      sourceHandle: source
+      target: '1735721534571'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: http-request
+      id: quote-to-output
+      source: '1735721534571'
+      sourceHandle: source
+      target: '1735721534572'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: end
+      id: output-to-end
+      source: '1735721534572'
+      sourceHandle: source
+      target: '1735721534573'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: 供应商报价
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: supplier_quote
+        - label: 产品规格
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: product_specs
+        - label: 客户需求数量
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: quantity
+        - label: 目标国家
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: destination_country
+        - label: 交货期要求
+          max_length: 48
+          options: []
+          required: false
+          type: text-input
+          variable: delivery_time
+      height: 116
+      id: '1735721534567'
+      position:
+        x: 30
+        y: 282
+      positionAbsolute:
+        x: 30
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 计算产品成本，包括采购成本、包装成本、处理费用等
+        memory:
+          query_prompt_template: ''
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - id: system
+          role: system
+          text: |
+            你是一个专业的产品成本计算专家。根据供应商报价和产品规格，计算总的产品成本。
+
+            需要考虑的成本项：
+            1. 采购成本：供应商报价 × 数量
+            2. 包装成本：根据产品规格估算包装材料和人工成本
+            3. 质检成本：约为采购成本的2-3%
+            4. 操作费用：约为采购成本的5%
+            5. 资金成本：约为采购成本的1-2%
+
+            请详细计算每项成本，并提供总成本。
+        - id: user
+          role: user
+          text: |
+            供应商报价：{{#1735721534567.supplier_quote#}}
+            产品规格：{{#1735721534567.product_specs#}}
+            需求数量：{{#1735721534567.quantity#}}
+
+            请计算详细的产品成本。
+        selected: false
+        title: 产品成本计算
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1735721534568'
+      position:
+        x: 334
+        y: 282
+      positionAbsolute:
+        x: 334
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset:
+          dataset_ids: []
+          retrieval_mode: single
+          reranking_enable: false
+          reranking_mode: 
+          reranking_model:
+            completion_params: {}
+            mode: 
+            name: ''
+            provider: ''
+          score_threshold: 0.5
+          score_threshold_enabled: false
+          top_k: 3
+        desc: 查询物流费用数据库，获取目标国家的运费信息
+        query_variable_selector:
+        - '1735721534567'
+        - destination_country
+        retrieval_mode: single
+        selected: false
+        title: 物流费用查询
+        type: knowledge-retrieval
+      height: 54
+      id: '1735721534569'
+      position:
+        x: 638
+        y: 282
+      positionAbsolute:
+        x: 638
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据物流费用和产品成本，计算利润和最终售价
+        memory:
+          query_prompt_template: ''
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - id: system
+          role: system
+          text: |
+            你是一个专业的利润分析师。根据产品成本和物流费用，计算合理的利润率和最终售价。
+
+            利润计算原则：
+            1. 标准利润率：15-30%（根据产品类型调整）
+            2. 风险保证金：5-10%
+            3. 汇率波动预留：2-5%
+            4. 最低毛利润率：不低于20%
+
+            需要输出：
+            1. 总成本（产品成本+物流成本）
+            2. 建议利润率
+            3. 利润金额
+            4. 最终报价
+            5. 单价
+        - id: user
+          role: user
+          text: |
+            产品成本：{{#1735721534568.text#}}
+            物流费用：{{#1735721534569.result#}}
+            需求数量：{{#1735721534567.quantity#}}
+            目标国家：{{#1735721534567.destination_country#}}
+
+            请计算利润和最终报价。
+        selected: false
+        title: 利润计算
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1735721534570'
+      position:
+        x: 942
+        y: 282
+      positionAbsolute:
+        x: 942
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成专业的客户报价单
+        memory:
+          query_prompt_template: ''
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.1
+          mode: chat
+          name: gpt-4
+          provider: openai
+        prompt_template:
+        - id: system
+          role: system
+          text: |
+            你是一个专业的报价单生成专家。根据成本分析和利润计算，生成规范的客户报价单。
+
+            报价单格式：
+            1. 产品信息（名称、规格、数量）
+            2. 单价和总价
+            3. 交货期
+            4. 付款条件
+            5. 有效期
+            6. 包装说明
+            7. 运输方式
+            8. 联系方式
+
+            注意事项：
+            - 价格要清晰明确
+            - 条款要专业规范
+            - 包含必要的免责声明
+        - id: user
+          role: user
+          text: |
+            产品规格：{{#1735721534567.product_specs#}}
+            需求数量：{{#1735721534567.quantity#}}
+            利润分析：{{#1735721534570.text#}}
+            交货期要求：{{#1735721534567.delivery_time#}}
+            目标国家：{{#1735721534567.destination_country#}}
+
+            请生成正式的客户报价单。
+        selected: false
+        title: 报价单生成
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1735721534571'
+      position:
+        x: 1246
+        y: 282
+      positionAbsolute:
+        x: 1246
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: |
+            {
+              "quote_id": "{{#1735721534567.quantity#}}_{{#sys.timestamp#}}",
+              "product_specs": "{{#1735721534567.product_specs#}}",
+              "quantity": "{{#1735721534567.quantity#}}",
+              "destination": "{{#1735721534567.destination_country#}}",
+              "quote_content": "{{#1735721534571.text#}}",
+              "generated_at": "{{#sys.timestamp#}}"
+            }
+          type: json
+        desc: 保存报价单到系统
+        headers: ''
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          connect: 30
+          read: 60
+          write: 60
+        title: 保存报价单
+        type: http-request
+        url: http://localhost:5001/api/quotes/save
+        variables: []
+      height: 54
+      id: '1735721534572'
+      position:
+        x: 1550
+        y: 282
+      positionAbsolute:
+        x: 1550
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1735721534571'
+          - text
+          variable: final_quote
+        - value_selector:
+          - '1735721534570'
+          - text
+          variable: cost_analysis
+        - value_selector:
+          - '1735721534572'
+          - body
+          variable: save_result
+        selected: false
+        title: 结束
+        type: end
+      height: 90
+      id: '1735721534573'
+      position:
+        x: 1854
+        y: 282
+      positionAbsolute:
+        x: 1854
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244 

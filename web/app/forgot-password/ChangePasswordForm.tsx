@@ -92,7 +92,7 @@ const ChangePasswordForm = () => {
           </div>
           <div className="mx-auto mt-6 w-full">
             <Button variant='primary' className='w-full !text-sm'>
-              <a href="https://fanfei.ai">{t('login.explore')}</a>
+              <a href="https://keyai.tech">{t('login.explore')}</a>
             </Button>
           </div>
         </div>

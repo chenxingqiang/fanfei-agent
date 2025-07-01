@@ -11,7 +11,7 @@ import type {
   IWorkspace,
   InitValidateStatusResponse,
   InvitationResponse,
-  jinChenFanFeiVersionResponse,
+  JinChenFanFeiVersionResponse,
   Member,
   ModerateResponse,
   OauthResponse,
@@ -88,8 +88,8 @@ export const logout: Fetcher<CommonResponse, { url: string; params: Record<strin
   return get<CommonResponse>(url, params)
 }
 
-export const fetchLanggeniusVersion: Fetcher<jinChenFanFeiVersionResponse, { url: string; params: Record<string, any> }> = ({ url, params }) => {
-  return get<jinChenFanFeiVersionResponse>(url, { params })
+export const fetchLanggeniusVersion: Fetcher<JinChenFanFeiVersionResponse, { url: string; params: Record<string, any> }> = ({ url, params }) => {
+  return get<JinChenFanFeiVersionResponse>(url, { params })
 }
 
 export const oauth: Fetcher<OauthResponse, { url: string; params: Record<string, any> }> = ({ url, params }) => {

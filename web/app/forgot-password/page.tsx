@@ -20,7 +20,7 @@ const ForgotPassword = () => {
         <Header />
         {token ? <ChangePasswordForm /> : <ForgotPasswordForm />}
         {!systemFeatures.branding.enabled && <div className='px-8 py-6 text-sm font-normal text-text-tertiary'>
-          © {new Date().getFullYear()} jinChenFanFei, Inc. All rights reserved.
+          © {new Date().getFullYear()} JinChenFanFei, Inc. All rights reserved.
         </div>}
       </div>
     </div>

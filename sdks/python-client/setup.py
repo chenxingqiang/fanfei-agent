@@ -7,7 +7,7 @@ setup(
     name="dify-client",
     version="0.1.12",
     author="Dify",
-    author_email="hello@dify.ai",
+    author_email="hello@keyai.tech",
     description="A package for interacting with the Dify Service-API",
     long_description=long_description,
     long_description_content_type="text/markdown",

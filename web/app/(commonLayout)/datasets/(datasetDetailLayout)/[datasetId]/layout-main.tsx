@@ -171,7 +171,7 @@ const DatasetDetailLayout: FC<IAppDetailLayoutProps> = (props) => {
     <div className='flex grow overflow-hidden'>
       {!hideSideBar && <AppSideBar
         title={datasetRes?.name || '--'}
-        icon={datasetRes?.icon || 'https://static.fanfei.ai/images/dataset-default-icon.png'}
+        icon={datasetRes?.icon || 'https://static.keyai.tech/images/dataset-default-icon.png'}
         icon_background={datasetRes?.icon_background || '#F5F5F5'}
         desc={datasetRes?.description || '--'}
         isExternal={datasetRes?.provider === 'external'}

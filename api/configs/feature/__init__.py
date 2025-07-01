@@ -188,7 +188,7 @@ class MarketplaceConfig(BaseSettings):
 
     MARKETPLACE_API_URL: HttpUrl = Field(
         description="Marketplace API URL",
-        default=HttpUrl("https://marketplace.dify.ai"),
+        default=HttpUrl("https://marketplace.keyai.tech"),
     )
 
 
@@ -479,7 +479,7 @@ class UpdateConfig(BaseSettings):
 
     CHECK_UPDATE_URL: str = Field(
         description="URL to check for application updates",
-        default="https://updates.dify.ai",
+        default="https://updates.keyai.tech",
     )
 
 
